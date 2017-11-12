@@ -13,6 +13,7 @@ import numpy as np
 import time
 import csv
 import glob
+import os
 
 np.set_printoptions(threshold=np.nan) #Comment that line out, to print reduced matrices
 
@@ -131,12 +132,15 @@ print("Number of Epochs: ", num_epochs)
 print("Batch Size: ", batch_size)
 
 model.compile(loss=loss_function, optimizer=optimizer, class_mode=class_mode)
-
+model.compile(loss=loss_function, optimizer=optimizer)
 
 print()
 print("Training...")
 history = data_utils_train.LossHistory()
 model.fit(input_data, target_data, batch_size=batch_size, nb_epoch=num_epochs, callbacks=[history])
+
+if not os.path.exists("./history_csv"):
+    os.mkdir("./history_csv")
 w = csv.writer(open("./history_csv/%dlayer_%sepochs_%s.csv" %(num_layers, num_epochs, time.strftime("%Y%m%d_%H_%M")), "w"))
 for loss in history.losses:
     w.writerow([loss])

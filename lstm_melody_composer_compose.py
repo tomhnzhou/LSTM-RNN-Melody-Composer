@@ -12,6 +12,7 @@ from keras.layers.recurrent import LSTM
 import numpy as np
 import glob
 from os import listdir
+import os
 
 np.set_printoptions(threshold=np.nan) #Comment that line out, to print reduced matrices
 
@@ -116,10 +117,12 @@ print("loading weights...")
 model.load_weights(weights_path)
 print()
 print("Compiling model...")
-model.compile(loss='binary_crossentropy', optimizer='adam', class_mode=class_mode)
+model.compile(loss='binary_crossentropy', optimizer='adam')
 
 print()
 print("Compose...")
+if not os.path.exists("./testData/melody_composition"):
+    os.mkdir("./testData/melody_composition")
 for i, song in enumerate(test_data):
     net_output = model.predict(song)
     #print("net_output:", net_output)
